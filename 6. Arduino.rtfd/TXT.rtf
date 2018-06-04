@@ -1,0 +1,173 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw11905\paperh16837\margl1011\margr1011\margb1445\margt1011\vieww14000\viewh16000\viewkind1\viewscale103
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+
+\f0\b\fs24 \cf0 BARSicle - the learn, code, build project\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 The BARScile project is a beginners learning, coding and building project of the Banbury Amateur Radio Society. It will cover,\
+\
+* the use of the Arduino Nano\
+* the build of a digital Signal Generator / VFO, an RF Volt/power meter, a Direct Conversion Receiver. \
+\
+An extension of the project will cover an SSB Exciter, Power Amplifier with Low Pass Filter and an SWR/Antenna Tuning Unit\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+\cf0 3. ARDUINO\
+DDS\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 This is the final part of the build for ur Signal Generator. It is base on an Si5351 Digital Frequency Synthesiser.. We will use it generate 3 individual outputs of +10dBm from 100kHz to 150MHz to an accuracy of a few centi-hertz. It is programmed by an I2C bus. We will use an excellent Arduino library called Ethernet_Si5351. \
+\\\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-21 at 17.16.00.png \width6120 \height3920 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 How does it work?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-21 at 17.16.31.png \width6680 \height3440 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf0 The module uses a 25MHz xtal which is used by two PLLs to look them to high frequency. This is then divided down by a "Multi Synthesiser", the output can be taken directly or further divided to give an output as low as 8kHz. The chip is a 3.3v part, but the module has 5V <-> 3.3V convertors for power and the I2C bus. When set to an output current of 8mA, it will deliver +10dBm into a 50r load. But take note, the outputs are square waves, and so have considerable harmonic content.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 Connections
+\b0 \
+Connecting the module is very simple, it uses the 5V supply and the I2C SCL & SDA signals, the same as the OLED display.\
+
+\b \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-21 at 17.23.23.png \width5640 \height4620 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+
+\b0 \cf2 \expnd0\expndtw0\kerning0
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf2 The module has three outputs CLK0, 1 & 2.
+\b \cf0 \kerning1\expnd0\expndtw0 \
+\
+Ethernet_Si5351 library\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf0 This library allows easy and complete control of the synthesiser. The main fucnitons we will use are\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\fs20 \cf0 \
+\pard\pardeftab920\partightenfactor0
+\cf2 \expnd0\expndtw0\kerning0
+#include "si5351.h"\
+\
+Si5351 dds;\
+\
+void setup() \{\
+\
+  dds.init(SI5351_CRYSTAL_LOAD_8PF, 0, CORRECTION);\
+\
+  dds.drive_strength(SI5351_CLK0, SI5351_DRIVE_2MA);\
+\
+  dds.output_enable(SI5351_CLK0, 1);\
+\
+  dds.set_freq(frequency, SI5351_CLK0);\
+\}\
+\
+
+\f0\fs24 The si5351 library is included at the top of our sketch. And a 
+\f1 "DDS" 
+\f0 object is created. Then in "setup( )" the DDS is initialised, with the correct setting for our xtal (8pF load), it is set for a 25MHz xtal (
+\f1 "0"
+\f0 ) and any correction is applied to get the correct output frequencies.\
+\
+The drive output strength is set to the maximum of 8mA, which will give us +10dBm int a 50R load. When 3 outputs are used they must be set individually. Next the outputs used are enabled, the inhibit/enable is very fast and can be used for digital signals.\
+\
+Finally a frequency can be set fo each of the outputs individually. This is programmed in centi-Hertz using a 64bit variable to handle the numbers needed.\
+\
+
+\b Testing
+\b0 \
+A simple sketch is 
+\f1 File > Sketchbook > My_FREQ
+\f0  which uses the code above to generate a 7.1MHz signal. Upload this and listen on a nearby receiver to check it is working.\
+You can change the frequency by changing the variable 
+\f1 myFreq.
+\f0  There is nothing in the 
+\f1 loop( ).
+\f0 \
+\
+
+\b Signal Generator\
+
+\b0 Open  
+\f1 File > Sketchbook > My_SIGGEN.
+\f0  In the loop( ) the button of the encoder is checked to see if it is pressed. This is the button function which returns 
+\f1 true
+\f0  or 
+\f1 false
+\f0 .\
+\
+
+\f1\fs20 bool button() \{                                           // check button\
+  if (digitalRead(SW) == LOW) \{                           // debouce\
+    while (!digitalRead(SW));\
+    return true;                                          // pressed\
+  \}\
+  else \{\
+    return false;                                         // not pressed\
+  \}\
+\}
+\f0\fs24 \
+\
+this function is called during the loop( )\
+\
+
+\f1\fs20   if (button()) \{                                         // button pressed?\
+    if (freqStep == 100000000) freqStep = 1000;           // update step\
+    else freqStep = freqStep * 10;\
+    dispUpdate();                                         // display\
+  \}\
+
+\f0\fs24 \
+The button allows the frequency step to be cycled from 10Hz to 1MHz.\
+\
+Next the encoder is read to control the tuning. The code is the same as we saw in section 4. Arduino. And need not be explained again here.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+This is the completed Signal Generator Breadboard \
+\
+\pard\pardeftab920\qc\partightenfactor0
+\cf2 {{\NeXTGraphic Pasted Graphic.tiff \width7440 \height5580 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\pardeftab920\qc\partightenfactor0
+\cf2 \
+\pard\pardeftab920\partightenfactor0
+\cf2 \
+
+\b Calibration
+\b0 . \
+If you open  
+\f1 File > Examples > Ethernet_Si5351 > si5351_calibration 
+\f0 there is a calibration sketch provided with the library. \
+\
+The instructions are in the sketch. When you have run this and the module is outputting the correct frequency. Set the value of 
+\f1 CORRECTION
+\f0  in your code. You should be able to calibrate to better than 1Hz.}{\*\beandata789c9d935d6f82301486aff157748db752d876b12d8851c1c4cc2099b86497153a65e32ba5cef1ef57444aeb66b68c1bda73fabe4f7b4e6b8d3ed3047c105ac6793684a66e4040b2308fe26c3b84eb6036b88323bb675d39cb69f0e2bba048e292017f3d59cca7000e101a17454210720207f88bf92a00dc0321d78300ee182b1e103a1c0e3aae57e9619ed60b4be4d3bc2094550b6e36e0023d6211e498c65dd90e8f4671c8ec9e66bd93caee631aee62bec242f594474b46f9666d6ff5482a128d45fa146f75f9e68d84ac14324c29ae07c2a09fed934492692d573b3984092e855e4e37f9e9acbf9e3b5d5eb3e28c912da1f6ad85dae1518854636fa5f39fec2cf6a6502e603aceb5ca5140a8f36ca16715f93ff7e64fdc2eda567ce28ebd27f6ead6f78d778ef1e866cf48f9dcf4dfdba71ba591d2490dd334ee0df5c03ff68b5c3a9fb8360e57711aa6958c92572c8f8552b2dfead9d0329c1289f70b4354a4736bbc585e887b2a8a56cf2704670e665830cece7cde24513053ad540756ded6e9e109b6501bf52759b43a0b1d5facddfb02aa1d4161}

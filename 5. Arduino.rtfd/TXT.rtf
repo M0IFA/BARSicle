@@ -1,0 +1,150 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11905\paperh16837\margl1011\margr1011\margb1445\margt1011\vieww16400\viewh18800\viewkind1\viewscale125
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+
+\f0\b\fs24 \cf0 BARSicle - the learn, code, build project\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 The BARScile project is a beginners learning, coding and building project of the Banbury Amateur Radio Society. It will cover,\
+\
+* the use of the Arduino Nano\
+* the build of a digital Signal Generator / VFO, an RF Volt/power meter, a Direct Conversion Receiver. \
+\
+An extension of the project will cover an SSB Exciter, Power Amplifier with Low Pass Filter and an SWR/Antenna Tuning Unit\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+\cf0 3. ARDUINO\
+RTC & OLED\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 \
+There are some very clever ICs available, the DS3231 is just  one of them. This is a real time clock. It has a built in xtal for timing, and uses/charges an external battery. A bit like the watch on your wrist.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-21 at 09.53.12.png \width7120 \height5660 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 This is the module we are using, carrying a DS3231\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-21 at 09.59.10.png \width2720 \height1860 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 The module has an I2C serial bus interface, and has a unique bus address. So it can be wired in parallel with your OLED to the four lines VCC SCL SDA & GND.\
+\
+
+\b BCD\
+
+\b0 The RTC talks in Binary Coded Decimal. This is a coding where one byte of 8 bits is divided into two nibbles, and each 4 bits represents a binary number 0-15. Now we normally use decimal numbers, so we need some functions to convert backwards and forwards.\
+\
+
+\f1\fs20 byte decToBcd(byte val)\
+\{\
+  return( (val/10*16) + (val%10) );   // decimal - > BCD\
+\}\
+\
+byte bcdToDec(byte val)\
+\{\
+  return( (val/16*10) + (val%16) );   // BCD -> decimal\
+\}
+\f0\fs24 \
+\
+Have a think about these so you understand how they work. Getting grips with various computer number formats is key skill.\
+\
+
+\b Inputting the time\
+
+\b0 Plug in your CR1220 battery, +ve side visible, and mount the RTC on your breadboard. Then wire it up in parallel with the OLED four lines VCC, SCL, SDA & GND.\
+\
+When you first plug in your battery the RTC does not know the date & time. So you have to set it. This is done in three steps, entering the data on the monitor window.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-21 at 10.35.24.png \width2740 \height3680 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 The input is in ASCII. This converted to decimal bytes,\
+\
+
+\f1\fs20 void asciiToByte() \{\
+  // convert ASCII rtc buffer string to bytes\
+  yr = ((byte)rtcBuf[0] - 48) * 10 + (byte)rtcBuf[1] - 48;\
+  mth = ((byte)rtcBuf[2] - 48) * 10 + (byte)rtcBuf[3] - 48;\
+  dy = ((byte)rtcBuf[4] - 48) * 10 + (byte)rtcBuf[5] - 48;\
+  dow = ((byte)rtcBuf[6] - 48);\
+  hrs = ((byte)rtcBuf[7] - 48) * 10 + (byte)rtcBuf[8] - 48;\
+  mns = ((byte)rtcBuf[9] - 48) * 10 + (byte)rtcBuf[10] - 48;\
+  sec = ((byte)rtcBuf[11] - 48) * 10 + (byte)rtcBuf[12] - 48;\
+\}
+\f0\fs24 \
+48 is the ASCII code for the number 
+\f1 \'930\'94
+\f0  so take one ASCII character from the string input, subtract 48 and x10 and you get the 10\'92s as the first byte, take the second ASCII character and add it.\
+\
+
+\b Setting the RTC\
+
+\b0 Open the sketch 
+\i File > Sketchbook > My_SET_RTC_OLED. 
+\i0 This will prompt you to enter the date and time as an character string.\
+\
+\'93YYMMDDwHHMMSS\'94. Year, month, date, day-of-the-week, hour, minute, second. \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Pasted Graphic.tiff \width7380 \height3940 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Open the Monitor window and enter a time in the near future, say the next minute (seconds = 00). The exactly on this time hit Send. You can use internet time or your PC if it is synchronised.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-21 at 09.45.49.png \width7820 \height4560 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+2018, May, 21st, Monday, 9am, 44min, 00sec.\
+\
+The date & time are converted to bytes (see above) then the RTC is programmed over the I2C bus, at its address 
+\f1 (0x68
+\f0 ).\
+
+\f1\fs20 void setRTC() \{\
+  // program RTC\
+  Wire.beginTransmission(RTCADDR);\
+  Wire.write(0);               // next input at sec register\
+\
+  Wire.write(decToBcd(sec));   // set seconds\
+  Wire.write(decToBcd(mns));   // set minutes\
+  Wire.write(decToBcd(hrs));   // set hours\
+  Wire.write(decToBcd(dow));   // set day of week\
+  Wire.write(decToBcd(dy));    // set date (1 to 31)\
+  Wire.write(decToBcd(mth));   // set month (1-12)\
+  Wire.write(decToBcd(yr));    // set year (0 to 99)\
+  Wire.endTransmission();\
+\}\
+
+\f0\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Pasted Graphic 1.tiff \width8420 \height4520 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+A simpler sketch to just read the date & time and display it is 
+\i File > Sketchbook > My_RTC
+\i0 .\
+\
+Later we will se if we can include the date and time into the Signal Generator code.\
+\
+\
+\
+\
+{\*\beandata789c9d935d6f82301486aff157748db752d876b12d8851c1c4cc2099b86497153a65e32ba5cef1ef57444aeb66b68c1bda73fabe4f7b4e6b8d3ed3047c105ac6793684a66e4040b2308fe26c3b84eb6036b88323bb675d39cb69f0e2bba048e292017f3d59cca7000e101a17454210720207f88bf92a00dc0321d78300ee182b1e103a1c0e3aae57e9619ed60b4be4d3bc2094550b6e36e0023d6211e498c65dd90e8f4671c8ec9e66bd93caee631aee62bec242f594474b46f9666d6ff5482a128d45fa146f75f9e68d84ac14324c29ae07c2a09fed934492692d573b3984092e855e4e37f9e9acbf9e3b5d5eb3e28c912da1f6ad85dae1518854636fa5f39fec2cf6a6502e603aceb5ca5140a8f36ca16715f93ff7e64fdc2eda567ce28ebd27f6ead6f78d778ef1e866cf48f9dcf4dfdba71ba591d2490dd334ee0df5c03ff68b5c3a9fb8360e57711aa6958c92572c8f8552b2dfead9d0329c1289f70b4354a4736bbc585e887b2a8a56cf2704670e665830cece7cde24513053ad540756ded6e9e109b6501bf52759b43a0b1d5facddfb02aa1d4161}}

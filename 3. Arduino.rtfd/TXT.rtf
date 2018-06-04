@@ -1,0 +1,234 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11905\paperh16837\margl1011\margr1011\margb1445\margt1011\vieww14000\viewh15540\viewkind1\viewscale107
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+
+\f0\b\fs24 \cf0 BARSicle - the learn, code, build project\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 The BARScile project is a beginners learning, coding and building project of the Banbury Amateur Radio Society. It will cover,\
+\
+* the use of the Arduino Nano\
+* the build of a digital Signal Generator / VFO, an RF Volt/power meter, a Direct Conversion Receiver. \
+\
+An extension of the project will cover an SSB Exciter, Power Amplifier with Low Pass Filter and an SWR/Antenna Tuning Unit\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+\cf0 3. ARDUINO\
+OLED displays\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 An OLED (Organic Light Emitting Diode) is a sandwich of pixels with an organic negative electroluminescent emissive layer and a positive conductive layer, each pixel has a cathode and anode connection.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-19 at 15.27.48.png \width7840 \height3760 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+\cf0 \
+The top cathode is transparent.\
+\
+We are using a small 1.3" OLED, with a built-in controller chip, the SH1106. It is 5V operation and controlled over a two wire I2C bus. It has 128 x 64 pixels.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-19 at 17.24.08.png \width2420 \height2300 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 I2C bus
+\b0 \
+A quick word about the I2C bus. This is a two wire bi-directional serial data bus, one wire is the clock (SCL) an the second the data (SDA). More than one I2C device can be connected to the same bus. Each has a it's own unique address. On the Arduino there is a library called 
+\f1 "Wire.h"
+\f0  which drives pins A4 (SDA) and A5 (SCL) with the correct bus signals.\
+\
+So there are four connections from the Nano to your OLED display (which will be shared later with the Si5351 and the RTC, both of which have i2C interfaces)\
+\
+GND -> GND\
+5V -> VCC\
+A5 -> SCL\
+A4 -> SDA\
+\
+
+\b The Oled.h header file\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf0 We are going to use a public library u8g2. This is extensive, but also rather complex, as it has many display functions, many fonts and can support multiple display types. For this reason we have our own header file "
+\f1 Oled.h"
+\f0  just for our OLED with SH1106 controller, and containing a series of functions & fonts useful for our applications. Below is a summary of the 
+\f1 Oled.h
+\f0  function descriptions and the meaning of the variables used.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 Oled.h functions
+\b0 \
+\
+The first line creates an object 
+\f1 "oled" 
+\f0 with the correct class for the OLED we are using. \
+\
+
+\f1\fs20 U8G2_SH1106_128X64_NONAME_1_HW_I2C oled(U8G2_R0);\
+\
+// functions & usage\
+void dispBar(u8g2_uint_t x, u8g2_uint_t y, byte h, byte l)\
+void dispScn(u8g2_uint_t sx, u8g2_uint_t sy, uint64_t *a)\
+void setPix(u8g2_uint_t x, u8g2_uint_t y, uint64_t *a) \
+void dispFreq(u8g2_uint_t x, u8g2_uint_t y, double f, double cf, byte d)\
+void dispStep(u8g2_uint_t x, u8g2_uint_t y, unsigned int s)\
+void dispMsgS(u8g2_uint_t x, u8g2_uint_t y, char *m)\
+void dispMsg(u8g2_uint_t x, u8g2_uint_t y, char *m)\
+void dispMsgL(u8g2_uint_t x, u8g2_uint_t y, char *m)\
+void dispMsgUL(u8g2_uint_t x, u8g2_uint_t y, char *m)\
+void dispNum(u8g2_uint_t x, u8g2_uint_t y, double n, byte d)\
+void dispNumL(u8g2_uint_t x, u8g2_uint_t y, double n, byte d)\
+void dispNumUL(u8g2_uint_t x, u8g2_uint_t y, double n, byte d)\
+void dispDate(u8g2_uint_t x, u8g2_uint_t y, byte dw, byte da, byte mo, byte yr)\
+void dispTime(u8g2_uint_t x, u8g2_uint_t y, byte h, byte m, byte s)\
+void dispTimeL(u8g2_uint_t x, u8g2_uint_t y, byte h, byte m, byte s)\
+\
+\
+x, y	display position (top left, down)\
+h	height, time hour\
+l	length\
+f	Hz freq\
+cf	cHz freq\
+d	freq phase, others decimal place\
+*m	message\
+n	number\
+dw	day of the week\
+da	day\
+mo	month\
+yr	year\
+m	minute\
+s	second, or step, or screen array pointer\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 As you can see each function takes input parameters, but some are of a strange type. As integers can have different sizes on different computers (16bit, 32bit, 64bit) the  
+\f1 u8g2
+\f0  defines its own variable type it calls 
+\f1 u8g2_uint_t
+\f0 . Essentially this is an unsigned integer suitable for use on any machine including the Nano, which is a 16 bit machine.\
+\
+Now, as an example, if we want to display on the OLED 
+\f1 "HELLO WORLD"
+\f0  in a large font we can say\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\fs20 \cf0 dispMsgL(x, y, "HELLO WORLD");\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+X and Y are the coordinates of the top left of the text being displayed, measured from the top left of the display across (X) and down (Y). So X = 10 and Y = 30 starts the top/left of the 
+\f1 "H" 
+\f0 text at 10 pixels in from the left, and 30 pixels down.\
+\
+To use the 
+\f1 Oled.h
+\f0  header you must \'93#include" it at the top of your sketch.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-19 at 15.51.27.png \width8540 \height3020 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 Then you must initialise the OLED by the function 
+\f1 oled.begin();
+\f0  after that you can use any of the header functions.\
+\
+The display is refreshed using the 
+\f1 dispUpdate();
+\f0  function in your sketch, which accesses the variables to be displayed. These are passed to it by making them global variables. or as literals.\
+\
+Here's an update example, with the variables literally put in, they could be passed as global variables\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-19 at 15.55.59.png \width4680 \height2320 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 Run an example\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf0 With the OLED display wired up, Open and Upload the sketch\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1 \cf0 File > Sketchbook > My_OLED_EXAMPLES
+\f0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic IMG_0016.JPG \width5580 \height4160 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 ]\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 Have a good look at the code for this display to see how the functions are used.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 Now try the sketch\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1 \cf0 File > Sketchbook > My_OLED_NAME_CALL 
+\f0 this will display
+\f1 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic IMG_0017.JPG \width5880 \height4500 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0 \cf0 Modify the sketch code to display your own name and call sign.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 A voltmeter\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf0 Since the Nano has analog inputs we can measure external voltages (not < 0, not > +5V or damage will occur). A simple way to display the voltage is on our OLED. \
+\
+\
+Open\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\i \cf0 File > Sketchbook > My_VOLTS_OLED
+\i0  to see how this is done.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-20 at 14.12.43.png \width9060 \height5820 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+There is a floating point  global variable 
+\f1 \'93volts\'94
+\f0  used to pass the value from
+\f1  loop()
+\f0  to the 
+\f1 dispUpdate()
+\f0  function. The OLED is initialised in 
+\f1 setup().
+\f0 The analog input is converted from a digital 0-1023 to an analog floating point number 
+\f1 \'93volts\'94.
+\f0  The ADC uses the actual +5V line as a reference (for me this was actually 4.62V).
+\f1 \
+
+\f0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic IMG_0021.JPG \width6480 \height5040 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}}{\*\beandata789c9d935d6f82301486aff157748db752d876b12d8851c1c4cc2099b86497153a65e32ba5cef1ef57444aeb66b68c1bda73fabe4f7b4e6b8d3ed3047c105ac6793684a66e4040b2308fe26c3b84eb6036b88323bb675d39cb69f0e2bba048e292017f3d59cca7000e101a17454210720207f88bf92a00dc0321d78300ee182b1e103a1c0e3aae57e9619ed60b4be4d3bc2094550b6e36e0023d6211e498c65dd90e8f4671c8ec9e66bd93caee631aee62bec242f594474b46f9666d6ff5482a128d45fa146f75f9e68d84ac14324c29ae07c2a09fed934492692d573b3984092e855e4e37f9e9acbf9e3b5d5eb3e28c912da1f6ad85dae1518854636fa5f39fec2cf6a6502e603aceb5ca5140a8f36ca16715f93ff7e64fdc2eda567ce28ebd27f6ead6f78d778ef1e866cf48f9dcf4dfdba71ba591d2490dd334ee0df5c03ff68b5c3a9fb8360e57711aa6958c92572c8f8552b2dfead9d0329c1289f70b4354a4736bbc585e887b2a8a56cf2704670e665830cece7cde24513053ad540756ded6e9e109b6501bf52759b43a0b1d5facddfb02aa1d4161}}

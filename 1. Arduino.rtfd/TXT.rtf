@@ -1,0 +1,274 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11905\paperh16837\margl1011\margr1011\margb1445\margt1011\vieww14000\viewh16000\viewkind1\viewscale103
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+
+\f0\b\fs24 \cf0 BARSicle - the learn, code, build project\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 The BARScile project is a beginners learning, coding and building project of the Banbury Amateur Radio Society. It will cover,\
+\
+* the use of the Arduino Nano\
+* the build of a digital Signal Generator / VFO, an RF Volt/power meter, a Direct Conversion Receiver. \
+\
+An extension of the project will cover an SSB Exciter, Power Amplifier with Low Pass Filter and an SWR/Antenna Tuning Unit\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+\cf0 1. ARDUINO\
+Introduction, PC setup, IDE install, Load sketches and libraries from USB stick, Using IDE, Basic sketches.
+\b0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+\cf0 \
+This first topic of the BARSicle project covers an introduction to the Arduino Nano, the use of OLED displays, of Rotary Encoders and Digital Frequency Synthesisers. We start here with an introduction to the Arduino.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b \cf0 The Nano\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 There are many models of the Arduino, the one we will use is the Nano. This is a small 16MHz microcomputer with a USB interface for power and programming, it can also be powered by an external 7-20V supply. It has 2KB RAM and 32kB Flash memory, 30kB of which is available for user programs (called sketches in Arduino-speak). It has 22 lines which can be used for digital Input/Output: 8 of these can also be analog inputs, another 6 can also be digital PMW outputs. It is connected to your PC/Mac with a USB A to USB Mini cable for sketch uploading and 5V power supply\
+\
+Note that on the market there are two types of Nano, some Chinese versions with a different USB serial interface chip, the CH340, and the original Nano which uses an FTDI chip. Make sure you have the FTDI version.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b \cf0 Arduino software\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 The Arduino is supported by a complete "Integrated Development Environment" or IDE. \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-18 at 17.12.58.png \width7400 \height1280 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+\cf0 The IDE combines 3 items - a code editor, a compiler and an uploader. The code editor is where you write your programs. The compiler is chosen to match the version of the Arduino you use (or many other non-Arduino microcomputers which are supported), and the uploader also matches your chosen microcomputer.\
+\
+For those just starting out, a compiler is a piece of software that takes your input, human readable, code and translates it to machine code, in binary which your Nano understands.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+
+\f1 \cf0 if( x > 5) step = 1000; 
+\f0  {{\NeXTGraphic Screen Shot 2018-05-18 at 17.14.43.png \width1060 \height260 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}  
+\f1  0100101001000100
+\f0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b \cf0 Installation
+\b0 \
+The home site of the Arduino is at arduino.cc. Here you will find a menu "Downloads" and on this page you can select a download for your operating system - Windows, MacOS or Linux, the latest version is 1.8.5 when this was written. Chose the correct one and commence the download. You can make a small contribution to Arduino before you do so if you wish. Follow the normal installation procedure for your OS.\
+\
+
+\b Preferences
+\b0 \
+The Arduino installation will create a new folder in Documents > Arduino. This is where you will keep all your sketches and libraries. But you must check that the IDE knows where this is. To do so start the program and go to Preferences. Here enter, or browse for, the Arduino folder and put it in the box "Sketchbook Location". Click OK.\
+\
+
+\b USB Stick with course project\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 The sketches and the libraries we are going to use are on the USB stick (or available as a download on the BARS web site). They should be copied to your Document > Arduino folder,   which will then look like this\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-22 at 11.40.44.png \width5420 \height4000 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+
+\b \cf0 \
+\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 A word about sketches and libraries.
+\b0  \
+Sketches are kept in individual folders of the same name. Libraries are also kept in individual folers.\
+\
+Libraries can be of two sorts, a simple "header" file which contains pre-written functions you can add to your code. We will see later the header file 
+\f1 Oled.h
+\f0  that contains functions for displaying text, numbers and other things on an OLED display. \
+\
+A different sort is a "class" library that enables you to create "objects" with certain features. For example, say we had a library called 
+\f1 "Make_Car.h"
+\f0 , This would allow us to create a class of object which contains the description of the things a car can do - for example "steer" and "direction". We can then create two (or more) separate "car" objects like this,\
+\
+
+\f1\fs20 Make_Car Car_1;\
+Make_Car Car_2;\
+...
+\f0\fs24 \
+\
+The cars of this class each will have class functions for steering and direction. So we can say in our code,\
+\
+
+\f1\fs20 Car_1.direction(forward);\
+\
+Car_2.steer(left);\
+
+\f0\fs24 \
+etc\
+\
+We shall see the use of libraries later on for reading a Rotary encoder and controlling a Digital Frequency Synthesiser.\
+\
+
+\b Using the Arduino IDE\
+T
+\b0 he window of the IDE looks like this (MacOS version),\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+
+\b \cf0 {{\NeXTGraphic Screen Shot 2018-05-18 at 17.10.23.png \width8560 \height4600 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+
+\b0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 The menus are at the top. Underneath are 5 buttons on the left and one on the right. This is what they do,\
+\
+\
+1. Compile your code and report any errors\
+2. Compile AND Upload to your Nano\
+3. Open a new sketch\
+4. Open an existing sketch\
+5. Save your sketch (they are also saved by Compile and Upload)\
+\
+The right hand button opens a communication window that the Nano USB connection can use to exchange information to and from your PC.\
+\
+
+\b What is a function\
+
+\b0 A function is a stand alone bit of code which can take an input and provide an output. It is stand alone. It looks like this\
+\
+
+\f1 int functionName(int input, int input) \{\
+  what the function does\
+\}
+\f0 \
+\
+
+\b Coding a sketch\
+
+\b0 All sketches follow the same pattern or flow chart. This is quite simple and is made up of two functions that must be present,\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-18 at 18.25.12.png \width2640 \height3240 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 When a sketch starts to run it does so at the function 
+\f1 "setup()"
+\f0  which runs just once, execution then passes to the function 
+\f1 loop()
+\f0 , which runs repeatedly over and over again.\
+It's that simple. It is best understood by opening a new sketch (File > New or the New icon). which has comments about the way the sketch works. Do it now.\
+\
+
+\b IDE internal functions
+\b0 \
+The Arduino IDE provides a (hidden) library known as 
+\f1 Arduino.h.
+\f0  This has a number of pre-defined functions to enable you to write code, add to this any functions you write yourself. A list of the Arduino functions is in the file Documents > Arduino > reference > Reference.pdf. Or you can find it on the web at arduino.cc > Resources > Reference. If you want to know how a function works go to the web and click on its name.\
+\
+
+\b Write a little code\
+
+\b0 Open a new sketch and enter this code\
+\
+
+\f1\fs20 void setup() \{\
+  // put your setup code here, to run once:\
+  pinMode(13, OUTPUT)\
+\}\
+void loop() \{\
+  // put your main code here, to run repeatedly:\
+  dekay(100);
+\f0\fs24 \
+\}\
+\
+There is a deliberate mistake here, a ";" is missing after the 
+\f1 pinMode(...) 
+\f0 in the code. Now we will check the code for errors, Hit the Compile icon and the error will be shown - when you hit Compile you will be asked to save the sketch, do so, it can be deleted later.\
+\
+This is the error report\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-18 at 18.54.48.png \width7360 \height5400 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 reporting that a
+\f1  ";" 
+\f0 is expected before 
+\f1 "\}"
+\f0  token. Correct this (add a
+\f1  ";"
+\f0 ) and compile again to see that is now correct. All functions MUST be terminated by a
+\f1  ";"
+\f0 , but they can spread across more than one line of code.\
+\
+The next thing to learn is how to put comments in your code, so that if you come back to it later it is clear how it works. This is simple. A comment can start anywhere, on the same line as code, or a new line, it must start with 
+\f1 "//" 
+\f0 and ends when there is a new line. There is an example after the code 
+\f1 "delay(100);"
+\f0  above. Comments are ignored by the compiler.\
+\
+
+\b Global instructions and variables\
+
+\b0 When you want to include an external header or library in your sketch, or define a constant you can do this outside any function, normally at the top of your code. Same goes for global variables.\
+\
+In any function of your own that you write, or in 
+\f1 setup()
+\f0  or 
+\f1 loop()
+\f0  the variables you use are valid only 
+\i within
+\i0  that function and can't be accessed outside. You can pass inputs to and get an output from a function, but within the function any inputs are copied and will not be changed by the function. \
+\
+But if you define a variable outside any function it becomes global and can be accessed anywhere in the sketch. \
+\
+For example,\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-19 at 07.35.54.png \width8000 \height8140 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Here the compiler will include the header 
+\f1 "Oled.h" 
+\f0 in your code and  substitute 
+\f1 "13"
+\f0  for 
+\f1 "LED"
+\f0  wherever it finds it. The global variables 
+\f1 (m[ ], flag, 
+\f0 etc) can be accessed anywhere in any function, for example in 
+\f1 "loop()"
+\f0 , which also has its own 
+\f1 "local_variable"
+\f0  not accessible outside.\
+\
+Open the sketch
+\f1  File > Sketchbook > My_BLINK. 
+\f0 Now create an error, say you remove a
+\f1  ";"
+\f0  Compile the sketch and it will detect the error.\
+\
+
+\b The end
+\b0 \
+If you have not understood this, then there is no solution, go back and study it again. Read the function operations from Reference on-line, and look at code in the IDE File > Examples. Try to write some of your own code and compile it. E.g. blink the LED twice at 100ms, followed by once at 1sec ...see 
+\f1 My_BLINK_1.
+\f0 \
+\
+In the next section you will learn about using the Nano and trying out simple programs.}{\*\beandata789c9d935d6f82301486aff157748db752d876b12d8851c1c4cc2099b86497153a65e32ba5cef1ef57444aeb66b68c1bda73fabe4f7b4e6b8d3ed3047c105ac6793684a66e4040b2308fe26c3b84eb6036b88323bb675d39cb69f0e2bba048e292017f3d59cca7000e101a17454210720207f88bf92a00dc0321d78300ee182b1e103a1c0e3aae57e9619ed60b4be4d3bc2094550b6e36e0023d6211e498c65dd90e8f4671c8ec9e66bd93caee631aee62bec242f594474b46f9666d6ff5482a128d45fa146f75f9e68d84ac14324c29ae07c2a09fed934492692d573b3984092e855e4e37f9e9acbf9e3b5d5eb3e28c912da1f6ad85dae1518854636fa5f39fec2cf6a6502e603aceb5ca5140a8f36ca16715f93ff7e64fdc2eda567ce28ebd27f6ead6f78d778ef1e866cf48f9dcf4dfdba71ba591d2490dd334ee0df5c03ff68b5c3a9fb8360e57711aa6958c92572c8f8552b2dfead9d0329c1289f70b4354a4736bbc585e887b2a8a56cf2704670e665830cece7cde24513053ad540756ded6e9e109b6501bf52759b43a0b1d5facddfb02aa1d4161}

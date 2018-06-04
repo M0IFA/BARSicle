@@ -1,0 +1,194 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11905\paperh16837\margl1011\margr1011\margb1445\margt1011\vieww14000\viewh16000\viewkind1\viewscale103
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+
+\f0\b\fs24 \cf0 BARSicle - the learn, code, build project\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 The BARScile project is a beginners learning, coding and building project of the Banbury Amateur Radio Society. It will cover,\
+\
+* the use of the Arduino Nano\
+* the build of a digital Signal Generator / VFO, an RF Volt/power meter, a Direct Conversion Receiver. With the objective of using the WSJT-X program to receive digital FT-8 signals\
+\
+An extension of the project will cover an SSB Exciter, Power Amplifier with Low Pass Filter and an SWR/Antenna Tuning Unit\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\qc\partightenfactor0
+
+\b \cf0 2. ARDUINO\
+The Arduino Nano, setup and first sketches\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0 \cf0 We have covered the use of the software development IDE and learnt the basics of writing a sketch. Time to tackle the real world, Not software but hardware. A world you might be more familiar with.\
+\
+We are going to power up and run the Arduino Nano. The Nano is a microcomputer, it runs at 16MHz (slow by PC standards!)  and has small memories of 2kB RAM and 32kB Flash (SSD) memory - 2 kB of which is used for talking to your PC over the USB bus for loading programs, so 30kB available for you. It has lots of input/output pins, 22 altogether. 8 pins can be  used for digital I/O or analog input A0-A7, of which A4 & A5 can be used for an I2C serial bus,. It has 12 digital I/O pins D2-D13., of which 6 can be programmed to output PWM signals  (when smoothed these are analog outputs),  Pin D13 has an onboard red LED connected. The final 2 digital pins are TX & RX for communication with the USB interface through a dedicated interface FTDI.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-19 at 14.17.52.png \width5760 \height4220 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 \
+\
+Readying the Nano\
+
+\b0 These are your Kit parts\
+
+\b \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic IMG_0014.JPG \width8160 \height6120 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+
+\b0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+
+\b \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf0 The Nano is delivered in a anti-static packet along with 2 x 15pin headers. These should be inserted in the connections of the Nano and carefully soldered, taking care not to bridge adjacent pins. Make sure you get them vertical - you could plug them into the breadboard and solder them there.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-19 at 14.26.13.png \width7020 \height2940 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Plug the Nano into your breadboard at the left hand end. The pins may be a bit hard to push in, but persevere, give them a good shove.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic IMG_0015.JPG \width8060 \height6040 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Connect your Nano to your PC using the USB cable. The green power LED will light.\
+\
+
+\b Configure the communications with your PC.\
+
+\b0 Start the Arduino IDE program. Go to the menu T
+\i ools > Board 
+\i0  and select 
+\i "Arduino Nano", 
+\i0  then go to 
+\i Tools > Port 
+\i0 and select the USB port your Nano is plugged into. [on a PC this will be a COMn port, on a Mac it will look like /dev/cu.name).\
+\
+
+\b Test the Nano
+\b0 \
+At last we can run a sketch! Open the 
+\i File > Sketchbook > My_BLINK 
+\i0 sketch
+\i . 
+\i0 Now check the code is without errors by hitting the 
+\i Compile
+\i0  button (1st on the top left), no errors should be reported, if there are they must be corrected now. At last hit the 
+\i Upload
+\i0  button. The program will compile then upload to your Nano, the TX/RX lights will flash. 
+\i My_BLINK
+\i0  is a sketch that blinks the on-board red LED at 1 sec intervals.\
+\
+Check out the code to see how it does it.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+\b Your turn\
+
+\b0 Now write your own sketch to flash the LED 2 times for 100ms then one time for 1sec and repeat. Use a function of your own to flash the LED given the time as an input. \
+\
+If in doubt Upload the 
+\i File > Sketchbook > My_BLINK_1
+\i0 .\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-19 at 14.50.15.png \width8780 \height7760 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 Now try connecting an external resistor and LED from D4 -> 220R -> LED -> GND. Modify your program to flash this LED (hint change the #define LED pin number). The external LED will flash to the rhythm.\
+\
+Now modify the program to flash "CQ" in morse (dot = 300ms, dash = 900ms, space = 1200ms). You will have to add a new 
+\i delay(1200);
+\i0  to make the inter-character space... You could connect an external relay to the output pin and key your TX.\
+\
+
+\b Voltmeter
+\b0 \
+The Nano has 8 analog inputs
+\f1\fs20  
+\fs24 A0- A7.
+\f0  We can make a voltmeter using an analog input. The analog input on 
+\f1 A0
+\f0  is read by the function 
+\f1 analogRead(A0);
+\f0  this return an integer value from 0-1023. The reference for the ADC is the +5V supply line, which may not be a very accurate or stable +5V..\
+\
+So the first thing to do is to measure the actual +5V line value, mine was 4.62V. This value is put in the code for the conversion\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\fs20 \cf0 volts = (float)(analogRead(A0) * 4.62 / 1023);\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Note that 
+\f1 analogRead();
+\f0  returns an integer, this is converted to a floating point number 
+\f1 \'93volts\'94
+\f0  to display the decimal points\
+\
+Here\'92s the code\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-20 at 14.05.11.png \width9180 \height3860 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+To see the voltage we need to display it. This can be done on your PC. There is a window that can be opened by the right hand button on the menu bar. This opens a serial communication window to the USB connection.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2018-05-20 at 14.07.43.png \width8700 \height4700 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+The code 
+\f1 Serial.begin(9600); 
+\f0 sets the baud rate, and 
+\f1 Serial.println(volts);
+\f0  displays the 
+\f1 \'93volts\'94
+\f0  variable.\
+\
+Load the sketch 
+\i File > Scetchbook > My_VOLTS .
+\i0  Upload it. A convenient voltage to measure is the Nano 
+\f1 3V3
+\f0  output line so connect 
+\f1 A0
+\f0  to 
+\f1 3V3
+\f0 . Again you might fined the 3V3 output is not actually 3V3, in my case it is 3.21V.}{\*\beandata789c9d935d6f82301486aff157748db752d876b12d8851c1c4cc2099b86497153a65e32ba5cef1ef57444aeb66b68c1bda73fabe4f7b4e6b8d3ed3047c105ac6793684a66e4040b2308fe26c3b84eb6036b88323bb675d39cb69f0e2bba048e292017f3d59cca7000e101a17454210720207f88bf92a00dc0321d78300ee182b1e103a1c0e3aae57e9619ed60b4be4d3bc2094550b6e36e0023d6211e498c65dd90e8f4671c8ec9e66bd93caee631aee62bec242f594474b46f9666d6ff5482a128d45fa146f75f9e68d84ac14324c29ae07c2a09fed934492692d573b3984092e855e4e37f9e9acbf9e3b5d5eb3e28c912da1f6ad85dae1518854636fa5f39fec2cf6a6502e603aceb5ca5140a8f36ca16715f93ff7e64fdc2eda567ce28ebd27f6ead6f78d778ef1e866cf48f9dcf4dfdba71ba591d2490dd334ee0df5c03ff68b5c3a9fb8360e57711aa6958c92572c8f8552b2dfead9d0329c1289f70b4354a4736bbc585e887b2a8a56cf2704670e665830cece7cde24513053ad540756ded6e9e109b6501bf52759b43a0b1d5facddfb02aa1d4161}

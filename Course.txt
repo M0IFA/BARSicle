@@ -1,0 +1,27 @@
+BARSicle course
+
+1. Arudino - setup, basic sketch
+2. Arduino - Nano, 1st sketches
+3. Arduino - OLED
+4. Arduino - Encoder
+5. Arduino - RTC
+6. Arduino - DDS, SIGGEN
+7. Power - RF volts / power
+8. BPFs - design, test, other projects - Antenna analysiser?
+9. DCRX - design, kit BB?
+10 DCRX - build, text, WSJT-X/FT-8
+11.Power supply, multi-output 12V
+
+23/5 First session, too much covered, need repeat
+26/5 ordered kit-1 parts x10
+  HC Nano & USB
+     Enc
+     LEDs
+     220R
+     M-M
+     BB
+  eB Si5351
+     RTC
+  Am OLED
+30/5 Updated 1 & 6
+13/6 Plan is 1. revision 2. set upNano run BLINK & VOLTS 3. give gift
